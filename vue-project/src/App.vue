@@ -1,43 +1,66 @@
-<script setup>
-import { ref } from 'vue'
-
-let msg = ("Hello world")
-let rawHtml = ("<li>Cooffie</li>") 
-const checkedNames = ref([])
-let a = 10
-let b = 5
-let c = a + b
-</script>
-
 <template>
-  <div id="app">
-  <span>{{ msg }}</span> <br>
-  <span v-html="rawHtml"></span> 
-
-<select v-model="selected"> <br>
-  <option disabled value="">Please select one</option>
-  <option>Cooffie Latte</option>
-  <option>Espreso</option>
-  <option>Ristreto</option>
-  <option>Flat White</option>
-  <option>Frappe</option>
-  <option>Clod Brew</option>
-  <option>Affogato</option>
-</select>
-
-<div>enter toppings: </div><br>
-<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
-<label for="jack">cake</label>
-<input type="checkbox" id="john" value="John" v-model="checkedNames">
-<label for="john">Wall’s Chocolate Deluxe</label>
-<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
-<label for="mike">Wall’s Oreo Cookies & Cream</label>
-
-  <div v-bind:id="dynamicId"></div>
-  <button v-bind:disabled="isButtonDisabled">Pesan</button>
-  <br>
-  bil 1 = {{ a }} <br> 
-  bil 2 = {{ b }} <br>
-  Hasil = b1 + b2 = {{ c }}
+  <div>
+    <h2>Formulir</h2>
+    <form @submit.prevent="submitForm">
+      <label for="">Nama</label>
+      <input type="text" v-model="kontak.nama" :class="{ 'is-invalid': isInvalidName }" required>
+      <div v-if="isInvalidName" class="error-message">Nama harus isi disini</div>
+      <br>
+      <label for="">Email</label>
+      <input type="email" v-model="kontak.email" :class="{ 'is-invalid': isInvalidEmail }" required>
+      <div v-if="isInvalidEmail" class="error-message">Email harus isi disini</div>
+      <br>
+      <button type="submit">Simpan</button>
+    </form>
+    <div v-if="showResult">
+      nama : {{ name }} <br>
+      email : {{ email }}
+    </div>
   </div>
 </template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  data() {
+    return {
+      kontak: {
+        nama: '',
+        email: '',
+      },
+      showResult: ref(false),
+      name: ref(''),
+      email: ref(''),
+    };
+  },
+  methods: {
+    submitForm() {
+      this.name = this.kontak.nama;
+      this.email = this.kontak.email;
+      this.showResult = true;
+    },
+  },
+  computed: {
+    isInvalidName() {
+      return this.name.length < 1;
+    },
+    isInvalidEmail() {
+      return this.email.length < 1;
+    },
+  },
+};
+</script>
+
+<style>
+h2 {
+  color: rgb(0, 0, 0);
+}
+.error-message {
+  color: red;
+  margin-top: 5px;
+}
+.is-invalid {
+  border-color: red;
+}
+</style>
